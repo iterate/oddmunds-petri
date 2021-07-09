@@ -7,26 +7,7 @@ defmodule PetrixWeb.PageLive do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Process.send_after(self(), :tick, @tick)
-    {:ok, assign(socket, query: "", results: %{}, nodes: make_nodes(20))}
-  end
-
-  @impl true
-  def handle_event("suggest", %{"q" => query}, socket) do
-    {:noreply, assign(socket, results: search(query), query: query)}
-  end
-
-  @impl true
-  def handle_event("search", %{"q" => query}, socket) do
-    case search(query) do
-      %{^query => vsn} ->
-        {:noreply, redirect(socket, external: "https://hexdocs.pm/#{query}/#{vsn}")}
-
-      _ ->
-        {:noreply,
-         socket
-         |> put_flash(:error, "No dependencies found matching \"#{query}\"")
-         |> assign(results: %{}, query: query)}
-    end
+    {:ok, assign(socket, query: "", results: %{}, nodes: make_nodes(10))}
   end
 
   @impl true
@@ -55,11 +36,50 @@ defmodule PetrixWeb.PageLive do
     end
   end
 
+  defp make_nodes2(n) do
+    range = 0..700
+
+    {nodes, _} =
+      0..n
+      |> Enum.map_reduce(nil, &make_nodes_reducer/2)
+
+    nodes
+  end
+
+  defp make_nodes_reducer(x, acc) do
+    case {x, acc} do
+      {_, nil} ->
+        node = %{x: 500, y: 500}
+        {node, node}
+
+      {_, prev_node} ->
+        range = -100..100
+        node = %{x: prev_node.x + Enum.random(range), y: prev_node.y + Enum.random(range)}
+        {node, node}
+    end
+  end
+
   defp dist(range) do
-    (Enum.random(range) + Enum.random(range)) / 2
+    (Enum.random(range) + Enum.random(range))
+    |> div(2)
+    |> floor()
+  end
+
+  defp anti_dist(range) do
+    max = Enum.max(range)
+
+    moved = dist(range) + max
+
+    anti = rem(moved, max)
+
+    anti
   end
 
   defp alter_nodes(nodes) do
+    Enum.map(nodes, &alter_node/1)
+  end
+
+  defp alter_nodes2(nodes) do
     Enum.map(nodes, &alter_node/1)
   end
 
