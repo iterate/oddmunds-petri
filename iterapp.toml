@@ -1,2 +1,5 @@
 replicas = 1
 emoji = "🦠"
+
+[env.common]
+SECRET_KEY_BASE = { encrypted = "x0GOoqdyIsxrJEytFCzNybz_Qinab_xQC9UXrByURhVKew1OLXUKx6ea30TAsaClAbyEeaJCSF7U2ogGR0nHfZ5uF5Q5kw23HNnXkkh-Vld37FPlxV1xe0A6mIrlqdpLdejtt7idyc2_tb35nXtLgHK8jKYkuEVhvldjTxi2lXqTB_xv4Kv9hsJrOk6LuF58gE39ELoYnnR6yG0PTY9g5UJfhb9GpVs" }
