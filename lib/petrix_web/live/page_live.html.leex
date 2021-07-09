@@ -20,21 +20,6 @@
   margin-left: -50px;
 }
 
-.rect {
-  animation: rect-anim-left ease-in-out 2s infinite alternate;
-  height: 100px;
-}
-.label {
-  position: absolute;
-  top: 30px;
-  left: 0;
-  width: 50%;
-  text-align: center;
-}
-.label-new {
-  left: 50%;
-}
-
 </style>
     <div class="group">
     <%= for node <- @nodes do %>
@@ -55,4 +40,7 @@
         </filter>
       </defs>
     </svg>
+  <div class="controls" style="position: absolute; left: 0; top: 0;">
+  <button phx-click="reset">reset</button>
+  </div>
   </body>

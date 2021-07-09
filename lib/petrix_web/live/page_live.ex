@@ -16,16 +16,9 @@ defmodule PetrixWeb.PageLive do
     {:noreply, update(socket, :nodes, &alter_nodes/1)}
   end
 
-  defp search(query) do
-    if not PetrixWeb.Endpoint.config(:code_reloader) do
-      raise "action disabled when not in development"
-    end
-
-    for {app, desc, vsn} <- Application.started_applications(),
-        app = to_string(app),
-        String.starts_with?(app, query) and not List.starts_with?(desc, ~c"ERTS"),
-        into: %{},
-        do: {app, vsn}
+  @impl true
+  def handle_event("reset", _params, socket) do
+    {:noreply, assign(socket, :nodes, make_nodes(10))}
   end
 
   defp make_nodes(n) do
