@@ -40,7 +40,33 @@
         </filter>
       </defs>
     </svg>
-  <div class="controls" style="position: absolute; left: 0; top: 0;">
-  <button phx-click="reset">reset</button>
+  <div class="controls" style="position: absolute; left: 0; top: 0; padding: 1em;">
+    <fieldset>
+      <legend style="background-color: white">Seed algorithm</legend>
+
+      <input
+        type="radio"
+        id="random"
+        name="seed_algo"
+        value="random"
+
+        phx-click="set_seed_algo"
+        <%= if @seed_algo == :random, do: "checked" %>
+      >
+      <label for="random" style="background-color: white;">Plain Random</label>
+      <br>
+      <input
+        type="radio"
+        id="normal"
+        name="seed_algo"
+        value="normal"
+        <%= if @seed_algo == :normal, do: "checked" %>
+        phx-click="set_seed_algo"
+        >
+      <label for="normal" style="background-color: white;">Normal Distributed Random</label>
+      <br />
+      <br />
+    <button type="button" phx-click="reseed">reseed</button>
+    </fieldset>
   </div>
   </body>

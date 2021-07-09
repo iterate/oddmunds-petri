@@ -7,7 +7,9 @@ defmodule PetrixWeb.PageLive do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Process.send_after(self(), :tick, @tick)
-    {:ok, assign(socket, query: "", results: %{}, nodes: make_nodes(10))}
+    seed_algo = :normal
+    nodes = make_nodes(10, seed_algo)
+    {:ok, assign(socket, query: "", results: %{}, nodes: nodes, seed_algo: seed_algo)}
   end
 
   @impl true
@@ -17,11 +19,30 @@ defmodule PetrixWeb.PageLive do
   end
 
   @impl true
-  def handle_event("reset", _params, socket) do
-    {:noreply, assign(socket, :nodes, make_nodes(10))}
+  def handle_event("reseed", _params, socket) do
+    seed_algo = socket.assigns.seed_algo
+    {:noreply, assign(socket, :nodes, make_nodes(10, seed_algo))}
   end
 
-  defp make_nodes(n) do
+  def handle_event("set_seed_algo", %{"value" => value}, socket) do
+    value =
+      case value do
+        "normal" -> :normal
+        "random" -> :random
+      end
+
+    {:noreply, assign(socket, :seed_algo, value)}
+  end
+
+  defp make_nodes(n, :random) do
+    range = 0..700
+
+    for _ <- 0..n do
+      %{x: Enum.random(range), y: Enum.random(range)}
+    end
+  end
+
+  defp make_nodes(n, :normal) do
     range = 0..700
 
     for _ <- 0..n do
