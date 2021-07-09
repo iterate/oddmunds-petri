@@ -84,21 +84,7 @@ defmodule PetrixWeb.PageLive do
     |> floor()
   end
 
-  defp anti_dist(range) do
-    max = Enum.max(range)
-
-    moved = dist(range) + max
-
-    anti = rem(moved, max)
-
-    anti
-  end
-
   defp alter_nodes(nodes) do
-    Enum.map(nodes, &alter_node/1)
-  end
-
-  defp alter_nodes2(nodes) do
     Enum.map(nodes, &alter_node/1)
   end
 
