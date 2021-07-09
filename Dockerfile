@@ -1,15 +1,13 @@
-FROM bitwalker/alpine-elixir-phoenix:latest
+FROM bitwalker/alpine-elixir-phoenix:1.10.2 AS phx-builder
 
-# Set exposed ports
-EXPOSE 5000
-ENV PORT=5000 MIX_ENV=prod
+ENV MIX_ENV=prod
 
 # Cache elixir deps
 ADD mix.exs mix.lock ./
 RUN mix do deps.get, deps.compile
 
-# Same with npm deps
 ADD assets/package.json assets/
+ADD assets/package-lock.json assets/
 RUN cd assets && \
     npm install
 
@@ -20,6 +18,22 @@ RUN cd assets/ && \
     npm run deploy && \
     cd - && \
     mix do compile, phx.digest
+
+FROM bitwalker/alpine-elixir:latest
+
+EXPOSE 3000
+ENV PORT=3000 MIX_ENV=prod
+
+COPY --chown=default --from=phx-builder /opt/app/_build /opt/app/_build
+COPY --chown=default --from=phx-builder /opt/app/priv /opt/app/priv
+COPY --chown=default --from=phx-builder /opt/app/config /opt/app/config
+COPY --chown=default --from=phx-builder /opt/app/lib /opt/app/lib
+COPY --chown=default --from=phx-builder /opt/app/deps /opt/app/deps
+# COPY --from=phx-builder /opt/app/.mix /opt/app/.mix
+COPY --chown=default --from=phx-builder /opt/app/mix.* /opt/app/
+
+# tz stuff from adrian en to tre
+COPY --chown=default --from=phx-builder /opt/app/_build/prod/lib/tzdata/priv/release_ets /timezone_db/
 
 USER default
 
