@@ -32,8 +32,6 @@ COPY --chown=default --from=phx-builder /opt/app/deps /opt/app/deps
 # COPY --from=phx-builder /opt/app/.mix /opt/app/.mix
 COPY --chown=default --from=phx-builder /opt/app/mix.* /opt/app/
 
-# tz stuff from adrian en to tre
-COPY --chown=default --from=phx-builder /opt/app/_build/prod/lib/tzdata/priv/release_ets /timezone_db/
 
 USER default
 
