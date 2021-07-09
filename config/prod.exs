@@ -10,7 +10,7 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :petrix, PetrixWeb.Endpoint,
-  url: [host: "oddmunds-petri.test.iterate.no", port: 80],
+  url: [host: "oddmunds-petri.test.iterate.no", port: 5000],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
