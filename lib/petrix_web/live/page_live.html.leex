@@ -74,6 +74,16 @@
         phx-click="set_seed_algo"
         >
       <label for="chain" style="background-color: white;">Chained</label>
+       <br>
+      <input
+        type="radio"
+        id="chain_moment"
+        name="seed_algo"
+        value="chain_moment"
+        <%= if @seed_algo == :chain_moment, do: "checked" %>
+        phx-click="set_seed_algo"
+        >
+      <label for="chain_moment" style="background-color: white;">Chained with moment</label>
       <br />
       <br />
     <button type="button" phx-click="reseed">reseed</button>

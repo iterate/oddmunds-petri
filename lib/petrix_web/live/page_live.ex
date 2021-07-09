@@ -6,7 +6,7 @@ defmodule PetrixWeb.PageLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    seed_algo = :chain
+    seed_algo = :chain_moment
 
     if connected?(socket) do
       Process.send_after(self(), :tick, @tick)
@@ -36,6 +36,7 @@ defmodule PetrixWeb.PageLive do
         "normal" -> :normal
         "random" -> :random
         "chain" -> :chain
+        "chain_moment" -> :chain_moment
       end
 
     {:noreply, assign(socket, :seed_algo, value)}
@@ -63,6 +64,34 @@ defmodule PetrixWeb.PageLive do
       |> Enum.map_reduce(nil, &make_nodes_reducer/2)
 
     nodes
+  end
+
+  defp make_nodes(n, :chain_moment) do
+    {nodes, _} =
+      0..n
+      |> Enum.map_reduce(nil, &make_nodes_chain_moment_reducer/2)
+
+    nodes
+  end
+
+  defp make_nodes_chain_moment_reducer(x, acc) do
+    case {x, acc} do
+      {_, nil} ->
+        x = 500
+        y = 500
+        {%{x: x, y: y}, %{x: x, y: y, xm: 0, ym: 0}}
+
+      {_, prev} ->
+        range = -100..100
+        x = prev.x + Enum.random(range) + prev.xm
+        y = prev.y + Enum.random(range) + prev.ym
+        node = %{x: x, y: y}
+
+        xm = prev.x - x
+        ym = prev.y - y
+
+        {node, %{x: x, y: y, xm: xm, ym: ym}}
+    end
   end
 
   defp make_nodes_reducer(x, acc) do
