@@ -1,6 +1,10 @@
 <body>
 <style>
 
+body, label, legend {
+  background-color: #9cf
+}
+
 .group {
   position: absolute;
   top: 0;
@@ -42,7 +46,7 @@
     </svg>
   <div class="controls" style="position: absolute; left: 0; top: 0; padding: 1em;">
     <fieldset>
-      <legend style="background-color: white">Seed algorithm</legend>
+      <legend>Seed algorithm</legend>
 
       <input
         type="radio"
@@ -53,7 +57,7 @@
         phx-click="set_seed_algo"
         <%= if @seed_algo == :random, do: "checked" %>
       >
-      <label for="random" style="background-color: white;">Plain Random</label>
+      <label for="random">Plain Random</label>
       <br>
       <input
         type="radio"
@@ -63,7 +67,7 @@
         <%= if @seed_algo == :normal, do: "checked" %>
         phx-click="set_seed_algo"
         >
-      <label for="normal" style="background-color: white;">Normal Distributed Random</label>
+      <label for="normal">Normal Distributed Random</label>
       <br>
       <input
         type="radio"
@@ -73,7 +77,7 @@
         <%= if @seed_algo == :chain, do: "checked" %>
         phx-click="set_seed_algo"
         >
-      <label for="chain" style="background-color: white;">Chained</label>
+      <label for="chain">Chained</label>
        <br>
       <input
         type="radio"
@@ -83,7 +87,7 @@
         <%= if @seed_algo == :chain_moment, do: "checked" %>
         phx-click="set_seed_algo"
         >
-      <label for="chain_moment" style="background-color: white;">Chained with moment</label>
+      <label for="chain_moment">Chained with moment</label>
       <br />
       <br />
     <button type="button" phx-click="reseed">reseed</button>
