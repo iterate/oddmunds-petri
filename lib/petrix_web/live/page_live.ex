@@ -6,10 +6,16 @@ defmodule PetrixWeb.PageLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: Process.send_after(self(), :tick, @tick)
-    seed_algo = :normal
-    nodes = make_nodes(10, seed_algo)
-    {:ok, assign(socket, query: "", results: %{}, nodes: nodes, seed_algo: seed_algo)}
+    seed_algo = :chain
+
+    if connected?(socket) do
+      Process.send_after(self(), :tick, @tick)
+
+      nodes = make_nodes(10, seed_algo)
+      {:ok, assign(socket, nodes: nodes, seed_algo: seed_algo)}
+    else
+      {:ok, assign(socket, nodes: [], seed_algo: seed_algo)}
+    end
   end
 
   @impl true
@@ -29,6 +35,7 @@ defmodule PetrixWeb.PageLive do
       case value do
         "normal" -> :normal
         "random" -> :random
+        "chain" -> :chain
       end
 
     {:noreply, assign(socket, :seed_algo, value)}
@@ -50,9 +57,7 @@ defmodule PetrixWeb.PageLive do
     end
   end
 
-  defp make_nodes2(n) do
-    range = 0..700
-
+  defp make_nodes(n, :chain) do
     {nodes, _} =
       0..n
       |> Enum.map_reduce(nil, &make_nodes_reducer/2)

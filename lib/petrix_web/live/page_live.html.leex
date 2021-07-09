@@ -64,6 +64,16 @@
         phx-click="set_seed_algo"
         >
       <label for="normal" style="background-color: white;">Normal Distributed Random</label>
+      <br>
+      <input
+        type="radio"
+        id="chain"
+        name="seed_algo"
+        value="chain"
+        <%= if @seed_algo == :chain, do: "checked" %>
+        phx-click="set_seed_algo"
+        >
+      <label for="chain" style="background-color: white;">Chained</label>
       <br />
       <br />
     <button type="button" phx-click="reseed">reseed</button>
