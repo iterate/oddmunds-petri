@@ -1,49 +1,9 @@
-<body>
-<style>
-
-body, label, legend {
-  background-color: #9cf
-}
-
-.group {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  filter: url("#fancy-goo");
-}
-.rect {
-  width: 100px;
-  height: 100px;
-  background: black;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-top: -50px;
-  margin-left: -50px;
-}
-
-</style>
-    <div class="group">
+  <div class="group">
     <%= for node <- @nodes do %>
       <div class="rect" style="left: <%= node.x %>px; top: <%= node.y %>px"/> </div>
     <% end %>
     </div>
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-      <defs>
-        <filter id="fancy-goo">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
-          <feColorMatrix
-            in="blur"
-            mode="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
-            result="goo"
-          />
-          <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-        </filter>
-      </defs>
-    </svg>
+
   <div class="controls" style="position: absolute; left: 0; top: 0; padding: 1em;">
     <fieldset>
       <legend>Seed algorithm</legend>
@@ -93,4 +53,3 @@ body, label, legend {
     <button type="button" phx-click="reseed">reseed</button>
     </fieldset>
   </div>
-  </body>
